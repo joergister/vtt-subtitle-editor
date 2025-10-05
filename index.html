@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTT Subtitle Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>VTT Subtitle Editor</h1>
+            <p class="subtitle">Edit transcripts with synchronized audio playback</p>
+        </header>
+
+        <div class="file-upload-section">
+            <div class="upload-group">
+                <label for="audio-file">Audio File:</label>
+                <input type="file" id="audio-file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.opus,.webm">
+                <span class="file-name" id="audio-file-name">No file selected</span>
+            </div>
+            <div class="upload-group">
+                <label for="vtt-file">VTT Subtitle File:</label>
+                <input type="file" id="vtt-file" accept=".vtt,text/vtt">
+                <span class="file-name" id="vtt-file-name">No file selected</span>
+            </div>
+        </div>
+
+        <div class="audio-player-section">
+            <audio id="audio-player" controls></audio>
+            <div class="playback-info">
+                <span id="current-time">00:00:00</span>
+                <span class="separator">/</span>
+                <span id="total-time">00:00:00</span>
+            </div>
+        </div>
+
+        <div class="current-cue-display">
+            <div class="current-cue-header">Currently Playing:</div>
+            <div id="current-subtitle" class="current-subtitle">
+                <span class="speaker-tag" id="current-speaker"></span>
+                <span class="subtitle-text" id="current-text">Select files to begin...</span>
+            </div>
+        </div>
+
+        <div class="transcript-section">
+            <div class="transcript-header">
+                <h2>Transcript</h2>
+                <div class="controls">
+                    <button id="export-btn" class="btn-primary" disabled>Export Modified VTT</button>
+                </div>
+            </div>
+            <div id="transcript-container" class="transcript-container">
+                <div class="empty-state">Load audio and VTT files to display transcript</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vtt-editor.js"></script>
+</body>
+</html>
