@@ -33,6 +33,9 @@ class VTTEditor {
         // Play/Pause button handler
         this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
 
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => this.handleKeyboardShortcut(e));
+
         // Export handler
         this.exportBtn.addEventListener('click', () => this.exportVTT());
     }
@@ -178,9 +181,9 @@ class VTTEditor {
         cueDiv.className = 'cue-item';
         cueDiv.dataset.index = index;
 
-        // Create speaker dropdown options
-        const speakerOptions = Array.from(this.speakers).sort().map(speaker =>
-            `<option value="${speaker}" ${speaker === cue.speaker ? 'selected' : ''}>${speaker}</option>`
+        // Create speaker dropdown options with keyboard shortcuts
+        const speakerOptions = Array.from(this.speakers).sort().map((speaker, idx) =>
+            `<option value="${speaker}" ${speaker === cue.speaker ? 'selected' : ''}>${idx + 1}. ${speaker}</option>`
         ).join('');
 
         cueDiv.innerHTML = `
@@ -340,6 +343,63 @@ class VTTEditor {
                 this.currentActiveCueIndex--;
             }
         }
+    }
+
+    handleKeyboardShortcut(event) {
+        // Check if user is typing in an input field
+        const activeElement = document.activeElement;
+        const isTyping = activeElement && (
+            activeElement.tagName === 'INPUT' ||
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.tagName === 'SELECT'
+        );
+
+        // If typing in a field, don't handle shortcuts
+        if (isTyping) {
+            return;
+        }
+
+        // Number keys 1-9 for speaker shortcuts
+        if (event.key >= '1' && event.key <= '9') {
+            const speakerIndex = parseInt(event.key) - 1;
+            this.changeSpeakerByIndex(speakerIndex);
+            event.preventDefault();
+        }
+    }
+
+    changeSpeakerByIndex(speakerIndex) {
+        // Only change speaker if there's an active cue
+        if (this.currentActiveCueIndex === -1) {
+            return;
+        }
+
+        // Get sorted list of speakers
+        const speakersList = Array.from(this.speakers).sort();
+
+        // Check if the speaker index is valid
+        if (speakerIndex >= speakersList.length) {
+            return;
+        }
+
+        const newSpeaker = speakersList[speakerIndex];
+        const cueIndex = this.currentActiveCueIndex;
+
+        // Update the cue's speaker
+        this.cues[cueIndex].speaker = newSpeaker;
+
+        // Update the current subtitle display
+        this.currentSpeaker.textContent = newSpeaker;
+
+        // Update the dropdown in the transcript
+        const cueElement = this.transcriptContainer.querySelector(`[data-index="${cueIndex}"]`);
+        if (cueElement) {
+            const speakerSelect = cueElement.querySelector('.speaker-select');
+            if (speakerSelect) {
+                speakerSelect.value = newSpeaker;
+            }
+        }
+
+        console.log(`Changed speaker to: ${newSpeaker} (shortcut ${speakerIndex + 1})`);
     }
 
     checkIfReadyToEdit() {
