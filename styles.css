@@ -31,6 +31,38 @@ h1 {
 .subtitle {
     color: #6e6e73;
     font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.privacy-notice {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.95em;
+    border: 1px solid #a5d6a7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.privacy-notice strong {
+    font-weight: 600;
+}
+
+.repo-link {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.repo-link:hover {
+    color: #1565c0;
+    text-decoration: underline;
 }
 
 /* File Upload Section */
