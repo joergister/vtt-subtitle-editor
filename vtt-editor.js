@@ -8,6 +8,7 @@ class VTTEditor {
         this.currentTimeDisplay = document.getElementById('current-time');
         this.totalTimeDisplay = document.getElementById('total-time');
         this.exportBtn = document.getElementById('export-btn');
+        this.playPauseBtn = document.getElementById('play-pause-btn');
 
         this.cues = [];
         this.speakers = new Set();
@@ -26,6 +27,11 @@ class VTTEditor {
         // Audio playback handlers
         this.audioElement.addEventListener('timeupdate', () => this.handleTimeUpdate());
         this.audioElement.addEventListener('loadedmetadata', () => this.updateTotalTime());
+        this.audioElement.addEventListener('play', () => this.updatePlayPauseButton());
+        this.audioElement.addEventListener('pause', () => this.updatePlayPauseButton());
+
+        // Play/Pause button handler
+        this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
 
         // Export handler
         this.exportBtn.addEventListener('click', () => this.exportVTT());
@@ -291,6 +297,27 @@ class VTTEditor {
 
     updateTotalTime() {
         this.totalTimeDisplay.textContent = this.formatTimestamp(this.audioElement.duration);
+    }
+
+    togglePlayPause() {
+        if (this.audioElement.paused) {
+            this.audioElement.play();
+        } else {
+            this.audioElement.pause();
+        }
+    }
+
+    updatePlayPauseButton() {
+        const playIcon = this.playPauseBtn.querySelector('.play-icon');
+        const pauseIcon = this.playPauseBtn.querySelector('.pause-icon');
+
+        if (this.audioElement.paused) {
+            playIcon.style.display = 'inline';
+            pauseIcon.style.display = 'none';
+        } else {
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'inline';
+        }
     }
 
     seekToCue(index) {

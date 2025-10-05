@@ -42,8 +42,14 @@
         <div class="current-cue-display">
             <div class="current-cue-header">Currently Playing:</div>
             <div id="current-subtitle" class="current-subtitle">
-                <span class="speaker-tag" id="current-speaker"></span>
-                <span class="subtitle-text" id="current-text">Select files to begin...</span>
+                <button id="play-pause-btn" class="play-pause-btn" title="Play/Pause (Space)">
+                    <span class="play-icon">▶</span>
+                    <span class="pause-icon" style="display: none;">⏸</span>
+                </button>
+                <div class="subtitle-content">
+                    <span class="speaker-tag" id="current-speaker"></span>
+                    <span class="subtitle-text" id="current-text">Select files to begin...</span>
+                </div>
             </div>
         </div>
 
