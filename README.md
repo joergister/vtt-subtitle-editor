@@ -1,5 +1,7 @@
 # VTT Subtitle Editor - 100% Offline & Private
 
+[![Certified Shovelware](https://justin.searls.co/img/shovelware.svg)](https://justin.searls.co/shovelware/)
+
 A web-based tool for editing VTT (WebVTT) subtitle files with synchronized audio playback. Perfect for correcting transcription errors and speaker attributions in interview transcripts.
 
 🌐 **Live App**: https://joergister.github.io/vtt-subtitle-editor/
