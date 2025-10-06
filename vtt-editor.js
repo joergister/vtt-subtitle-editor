@@ -9,6 +9,7 @@ class VTTEditor {
         this.totalTimeDisplay = document.getElementById('total-time');
         this.exportBtn = document.getElementById('export-btn');
         this.playPauseBtn = document.getElementById('play-pause-btn');
+        this.progressBar = document.getElementById('progress-bar');
 
         this.cues = [];
         this.speakers = new Set();
@@ -38,6 +39,9 @@ class VTTEditor {
 
         // Export handler
         this.exportBtn.addEventListener('click', () => this.exportVTT());
+
+        // Warn before closing/reloading tab
+        window.addEventListener('beforeunload', (e) => this.handleBeforeUnload(e));
     }
 
     handleAudioUpload(event) {
@@ -255,6 +259,12 @@ class VTTEditor {
         // Update time display
         this.currentTimeDisplay.textContent = this.formatTimestamp(currentTime);
 
+        // Update progress bar
+        if (this.audioElement.duration) {
+            const progress = (currentTime / this.audioElement.duration) * 100;
+            this.progressBar.style.width = `${progress}%`;
+        }
+
         // Find active cue
         const activeCueIndex = this.cues.findIndex(cue =>
             currentTime >= cue.startTime && currentTime < cue.endTime
@@ -405,6 +415,14 @@ class VTTEditor {
     checkIfReadyToEdit() {
         if (this.audioElement.src && this.cues.length > 0) {
             this.exportBtn.disabled = false;
+        }
+    }
+
+    handleBeforeUnload(event) {
+        // Show warning if cues have been loaded (work in progress)
+        if (this.cues.length > 0) {
+            event.preventDefault();
+            event.returnValue = ''; // Required for Chrome
         }
     }
 
