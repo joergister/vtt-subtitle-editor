@@ -17,6 +17,9 @@ class VTTEditor {
         this.audioURL = null;
         this.vttFileName = 'modified_transcript.vtt';
 
+        // Scroll to work button
+        this.scrollToWorkBtn = document.getElementById('scroll-to-work-btn');
+
         this.initializeEventListeners();
     }
 
@@ -28,7 +31,7 @@ class VTTEditor {
         // Audio playback handlers
         this.audioElement.addEventListener('timeupdate', () => this.handleTimeUpdate());
         this.audioElement.addEventListener('loadedmetadata', () => this.updateTotalTime());
-        this.audioElement.addEventListener('play', () => this.updatePlayPauseButton());
+        this.audioElement.addEventListener('play', () => this.handlePlay());
         this.audioElement.addEventListener('pause', () => this.updatePlayPauseButton());
 
         // Play/Pause button handler
@@ -39,6 +42,9 @@ class VTTEditor {
 
         // Export handler
         this.exportBtn.addEventListener('click', () => this.exportVTT());
+
+        // Scroll to work button handler
+        this.scrollToWorkBtn.addEventListener('click', () => this.scrollToWorkingPosition());
 
         // Warn before closing/reloading tab
         window.addEventListener('beforeunload', (e) => this.handleBeforeUnload(e));
@@ -298,8 +304,19 @@ class VTTEditor {
             if (cueElement) {
                 cueElement.classList.add('active');
 
-                // Scroll to active cue
-                cueElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Scroll to active cue within the transcript container only
+                const containerTop = this.transcriptContainer.scrollTop;
+                const containerHeight = this.transcriptContainer.clientHeight;
+                const elementTop = cueElement.offsetTop - this.transcriptContainer.offsetTop;
+                const elementHeight = cueElement.offsetHeight;
+
+                // Center the element in the container
+                const scrollTo = elementTop - (containerHeight / 2) + (elementHeight / 2);
+
+                this.transcriptContainer.scrollTo({
+                    top: scrollTo,
+                    behavior: 'smooth'
+                });
             }
         } else {
             // No active cue
@@ -318,6 +335,13 @@ class VTTEditor {
         } else {
             this.audioElement.pause();
         }
+    }
+
+    handlePlay() {
+        this.updatePlayPauseButton();
+
+        // Every time play is pressed, scroll to working position
+        this.scrollToWorkingPosition();
     }
 
     updatePlayPauseButton() {
@@ -415,6 +439,25 @@ class VTTEditor {
     checkIfReadyToEdit() {
         if (this.audioElement.src && this.cues.length > 0) {
             this.exportBtn.disabled = false;
+
+            // Show scroll to work button when both files are loaded
+            this.scrollToWorkBtn.style.display = 'block';
+        }
+    }
+
+    scrollToWorkingPosition() {
+        // Always scroll to "Currently Playing" at the top
+        const currentCueDisplay = document.querySelector('.current-cue-display');
+
+        if (currentCueDisplay) {
+            const rect = currentCueDisplay.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = rect.top + scrollTop - 20; // 20px from top
+
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
         }
     }
 

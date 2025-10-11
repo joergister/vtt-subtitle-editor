@@ -8,25 +8,27 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>VTT Subtitle Editor</h1>
-            <p class="subtitle">Edit transcripts with synchronized audio playback</p>
-            <div class="privacy-notice">
-                🔒 <strong>100% Offline & Private</strong> - All processing happens in your browser. No files are uploaded.
-                <a href="https://github.com/joergister/vtt-subtitle-editor" target="_blank" class="repo-link">📁 View Source Code</a>
-            </div>
-        </header>
+        <div class="collapsible-container" id="collapsible-container">
+            <header>
+                <h1>VTT Subtitle Editor</h1>
+                <p class="subtitle">Edit transcripts with synchronized audio playback</p>
+                <div class="privacy-notice">
+                    🔒 <strong>100% Offline & Private</strong> - All processing happens in your browser. No files are uploaded.
+                    <a href="https://github.com/joergister/vtt-subtitle-editor" target="_blank" class="repo-link">📁 View Source Code</a>
+                </div>
+            </header>
 
-        <div class="file-upload-section">
-            <div class="upload-group">
-                <label for="audio-file">Audio File:</label>
-                <input type="file" id="audio-file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.opus,.webm">
-                <span class="file-name" id="audio-file-name">No file selected</span>
-            </div>
-            <div class="upload-group">
-                <label for="vtt-file">VTT Subtitle File:</label>
-                <input type="file" id="vtt-file" accept=".vtt,text/vtt">
-                <span class="file-name" id="vtt-file-name">No file selected</span>
+            <div class="file-upload-section">
+                <div class="upload-group">
+                    <label for="audio-file">Audio File:</label>
+                    <input type="file" id="audio-file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.aac,.flac,.opus,.webm">
+                    <span class="file-name" id="audio-file-name">No file selected</span>
+                </div>
+                <div class="upload-group">
+                    <label for="vtt-file">VTT Subtitle File:</label>
+                    <input type="file" id="vtt-file" accept=".vtt,text/vtt">
+                    <span class="file-name" id="vtt-file-name">No file selected</span>
+                </div>
             </div>
         </div>
 
@@ -38,6 +40,10 @@
                 <span id="total-time">00:00:00</span>
             </div>
         </div>
+
+        <button id="scroll-to-work-btn" class="scroll-to-work-btn" title="Scroll to working position" style="display: none;">
+            ↓ Back to Transcript
+        </button>
 
         <div class="current-cue-display">
             <div class="current-cue-header">Currently Playing:</div>
