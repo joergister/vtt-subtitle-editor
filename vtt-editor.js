@@ -17,8 +17,9 @@ class VTTEditor {
         this.audioURL = null;
         this.vttFileName = 'modified_transcript.vtt';
 
-        // Scroll to work button
+        // Scroll to work button and cached reference to current cue display
         this.scrollToWorkBtn = document.getElementById('scroll-to-work-btn');
+        this.currentCueDisplay = document.querySelector('.current-cue-display');
 
         this.initializeEventListeners();
     }
@@ -304,7 +305,9 @@ class VTTEditor {
             if (cueElement) {
                 cueElement.classList.add('active');
 
-                // Scroll to active cue within the transcript container only
+                // Scroll within the transcript container only (not the whole page)
+                // This keeps the active cue centered within the fixed-height transcript area
+                // while the page scroll position remains unchanged
                 const containerTop = this.transcriptContainer.scrollTop;
                 const containerHeight = this.transcriptContainer.clientHeight;
                 const elementTop = cueElement.offsetTop - this.transcriptContainer.offsetTop;
@@ -446,13 +449,12 @@ class VTTEditor {
     }
 
     scrollToWorkingPosition() {
-        // Always scroll to "Currently Playing" at the top
-        const currentCueDisplay = document.querySelector('.current-cue-display');
-
-        if (currentCueDisplay) {
-            const rect = currentCueDisplay.getBoundingClientRect();
+        // Scroll to "Currently Playing" section for better workflow
+        // Uses window-level scrolling to position the section near the top with a 20px offset
+        if (this.currentCueDisplay) {
+            const rect = this.currentCueDisplay.getBoundingClientRect();
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const targetPosition = rect.top + scrollTop - 20; // 20px from top
+            const targetPosition = rect.top + scrollTop - 20; // 20px offset from top
 
             window.scrollTo({
                 top: targetPosition,
